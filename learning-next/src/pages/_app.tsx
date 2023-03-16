@@ -1,5 +1,6 @@
 import type { AppProps } from "next/app";
 import { Roboto, Inter } from "next/font/google";
+import '@/styles/index.scss';
 
 const roboto = Roboto({
   weight: ['400', '500', '700'],

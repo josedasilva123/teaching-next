@@ -1,0 +1,42 @@
+/*
+.btn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    &.lg{
+        padding: 0 30px;
+        height: 56px;
+    }
+
+    &.md{
+        padding: 0 20px;
+        height: 52px;
+    }
+
+    &.sm{
+        padding: 0 15px;
+        height: 46px;
+    }
+
+    &.primary{
+        background: $color-primary;
+    }
+
+    &.secondary{
+        background: $color-secondary;
+    }
+}
+*/
+
+@mixin button($name, $background-color, $height, $padding){
+    .button-#{$name}{
+        background-color: #{$background-color};
+        height: #{$height}px;
+        padding: 0 #{$padding}px;
+    }
+}
+
+@include button("primary", $color-primary, 56, 20);
+@include button("secondary", $color-secondary, 56, 20);
+@include button("white", #fff, 40, 20);

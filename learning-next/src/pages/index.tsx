@@ -1,9 +1,11 @@
 import ProtectedRoutes from "@/components/ProtectedRoutes";
+import { StyledButton } from "@/styles/button";
 import { GetStaticProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import ImageExample from "../../public/image.jpg";
+import { api } from "./services/api";
 
 interface iPokemon {
    name: string;
@@ -25,23 +27,24 @@ export default function Home({ pokemonList }: IHomeProps) {
             <meta name="viewport" content="width=device-width, initial-scale=1" />
             <link rel="icon" href="/favicon.ico" />
          </Head>
-         <ProtectedRoutes>
-            <main>
-               <div>
-                  <Link href="/">Link</Link>
-                  <Image src={ImageExample} alt="Imagem" />
-                  <button onClick={() => console.log(pokemonList)}></button>
-                  <h1>Página principal</h1>
-                  <ul>
-                     {pokemonList.map((pokemon) => (
-                        <li key={pokemon.name}>
-                           <h3>{pokemon.name}</h3>
-                        </li>
-                     ))}
-                  </ul>
-               </div>
-            </main>
-         </ProtectedRoutes>
+
+         <main>
+            <div>
+               <button onClick={() => console.log(pokemonList)}></button>
+               <h1>Página principal</h1>
+               <ul>
+                  {pokemonList.map((pokemon) => (
+                     <li key={pokemon.name}>
+                        <Link href={`/pokemon/${pokemon.name}`}>
+                            <h3>{pokemon.name}</h3>
+                        </Link>                       
+                     </li>
+                  ))}
+               </ul>
+               <StyledButton style={"primary"}>Teste</StyledButton>
+               <StyledButton style={"secondary"}>Teste</StyledButton>
+            </div>
+         </main>
       </>
    );
 }
@@ -49,14 +52,18 @@ export default function Home({ pokemonList }: IHomeProps) {
 //Acontecendo no back-end
 // Static with Regeneration - vai refazer a requisição de tempos em tempos (como base no valor segundos apresentado no  revalidate)
 export const getStaticProps: GetStaticProps = async () => {
-   const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151&offset=0");
-   const { results: pokemonList } = await res.json();
+   const { data: pokemonList } = await api.get('pokemon', {
+      params: {
+         limit: 151,
+         offset: 0,
+      }
+   })
 
    const revalidatingTime = 60 * 60 * 12;
 
    return {
       props: {
-         pokemonList,
+         pokemonList: pokemonList.results,
       },
       revalidate: revalidatingTime,
    };
